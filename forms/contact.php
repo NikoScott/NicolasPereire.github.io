@@ -17,10 +17,7 @@
     mail($destinataire, $sujet, $contenu);
 
     // Rediriger l'utilisateur vers une page de confirmation
-    header("");
-    $content = "<div class='alert alert-success' role='alert'>
-                Votre message a bien été envoyé !
-            </div>";
-    exit;
+    // header("");
+    // exit;
   }
 ?>
