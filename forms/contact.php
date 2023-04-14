@@ -1,23 +1,26 @@
 <?php
-//   // Vérifier que le formulaire a été soumis
-//   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     // Récupérer les données du formulaire
-//     $nom = $_POST["nom"];
-//     $email = $_POST["email"];
-//     $subject = $_POST["subject"];
-//     $message = $_POST["message"];
+  // Vérifier que le formulaire a été soumis
+  if ($_POST) {
+    // Récupérer les données du formulaire
+    $nom = $_POST["name"];
+    $email = $_POST["email"];
+    $subject = $_POST["subject"];
+    $message = $_POST["message"];
 
-//     // Envoyer un e-mail avec les données du formulaire
-//     $destinataire = "nico.pereire@gmail.com";
-//     $sujet = "Nouveau message de formulaire";
-//     $contenu = "Nom : " . $nom . "\n"
-//              . "E-mail : " . $email . "\n"
-//              . "Sujet : " . $subject
-//              . "Message : " . $message;
-//     mail($destinataire, $sujet, $contenu);
+    // Envoyer un e-mail avec les données du formulaire
+    $destinataire = "nico.pereire@gmail.com";
+    $sujet = "Nouveau message du portfolio";
+    $contenu = "Nom : " . $nom . "\n"
+             . "E-mail : " . $email . "\n"
+             . "Sujet : " . $subject
+             . "Message : " . $message;
+    mail($destinataire, $sujet, $contenu);
 
-//     // Rediriger l'utilisateur vers une page de confirmation
-//     header("");
-//     exit;
-//   }
+    // Rediriger l'utilisateur vers une page de confirmation
+    header("");
+    $content = "<div class='alert alert-success' role='alert'>
+                Votre message a bien été envoyé !
+            </div>";
+    exit;
+  }
 ?>
