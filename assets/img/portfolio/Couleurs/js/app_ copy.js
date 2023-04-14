@@ -11,7 +11,8 @@ $(document).ready(function() { // la page soit entièrrement chargée
 
     }
 
-    $(this).keypress(function(e) { // un click sur le dom
+    $(this).click(function(e) { // un click sur le dom
+    // $(this).keypress(function(e) { // un click sur le clavier
 
         // générer un rond d'une couleur et taille
         // aléatoire
