@@ -11,8 +11,8 @@ $(document).ready(function() { // la page soit entièrrement chargée
 
     }
 
-    $(this).click(function(e) { // un click sur le dom
     // $(this).keypress(function(e) { // un click sur le clavier
+    $(this).click(function(e) { // un click sur le dom
 
         // générer un rond d'une couleur et taille
         // aléatoire
@@ -21,10 +21,10 @@ $(document).ready(function() { // la page soit entièrrement chargée
         let randomColor = generateRandomColor();
 
         // la position du click
-        let x = Math.random() * ($(document).width() - randomWidth)
-                // e.pageX - (randomWidth / 2); // abscisse du click
-        let y = Math.random() * ($(document).height() - randomWidth)
-                // e.pageY - (randomWidth / 2); // ordonée du click
+        let x = e.pageX - (randomWidth / 2); // abscisse du click 
+                // pour clic au clavier : Math.random() * ($(document).width() - randomWidth)
+        let y = e.pageY - (randomWidth / 2); // ordonée du click 
+                // pour clic au clavier : Math.random() * ($(document).height() - randomWidth)
 
         // génerate circle
         let circle = `<div style='width:${randomWidth}px; height:${randomWidth}px; background:${randomColor}; border-radius:50%;position:absolute;top:${y}px;left:${x}px'>  </div>`;
