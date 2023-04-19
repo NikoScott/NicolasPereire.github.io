@@ -128,3 +128,15 @@ button {
     flex-direction: column;
 
 }
+
+
+/* @media screen and (max-width: 425px) {
+    #game {
+    flex-direction: column;
+    }
+    
+    #heroes .col-6,
+    #levels .col-6 {
+    width: 100%;
+    }
+    } */
