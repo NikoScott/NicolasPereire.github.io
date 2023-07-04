@@ -8,7 +8,7 @@
     $message = $_POST["message"];
 
     // Envoyer un e-mail avec les données du formulaire
-    $destinataire = "nico.pereire@gmail.com";
+    $destinataire = "admin@nicolaspereire.fr";
     $sujet = "Nouveau message du portfolio";
     $contenu = "Nom : " . $nom . "\n"
              . "E-mail : " . $email . "\n"
