@@ -1,3 +1,42 @@
+<?php
+$confirmationClass = "";
+
+// Vérifier si le formulaire est soumis
+if(isset($_POST['submit'])){
+    // Récupérer les valeurs des champs
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $email = $_POST['email'];
+    $sujet = $_POST['sujet'];
+    $message = $_POST['message'];
+
+    // Vérifier si tous les champs requis sont saisis
+    if(!empty($nom) && !empty($prenom) && !empty($email) && !empty($message)){
+        // Vérifier si l'adresse e-mail est valide
+        if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+            // Adresse e-mail de destination
+            $to = "contact@nicolaspereire.fr";
+            // Sujet du message
+            $subject = "Nouveau message nicolaspereire.fr";
+            // Corps du message
+            $body = "Prénom: $prenom\nNom: $nom\nEmail: $email\nSujet: $sujet\nMessage: $message";
+            // En-têtes du message
+            $headers = "From: $email";
+
+            // Envoyer l'e-mail
+            if(mail($to, $subject, $body, $headers)){
+                $confirmationMessage = "Merci $prenom $nom ! Votre message a été envoyé avec succès.";
+                $confirmationClass = "success";
+            } else{
+                $confirmationMessage = "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
+                $confirmationClass = "warning";
+            }
+        } 
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -32,7 +71,7 @@
 
 </head>
 
-<body>
+<body onload="calculateAge()">
 
   <!-- ======= Mobile nav toggle button ======= -->
   <!-- <button type="button" class="mobile-nav-toggle d-xl-none"><i class="bi bi-list mobile-nav-toggle"></i></button> -->
@@ -57,6 +96,12 @@
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex flex-column justify-content-center">
     <div class="container" data-aos="zoom-in" data-aos-delay="100">
+
+      <!-- CONFIRMATION -->
+      <?php if(!empty($confirmationClass)) { ?>
+          <div id="msg" class="alert alert-<?php echo $confirmationClass; ?>" role="alert"><?php echo $confirmationMessage; ?></div>
+      <?php } ?>
+
       <h1>Nicolas PEREIRE</h1>
       <p>I'm <span class="typed"
           data-typed-items="father., basketball player., developer., ready to work with you."></span></p>
@@ -85,7 +130,7 @@
 
         <div class="section-title">
           <h2>A propos de moi</h2>
-          <p> En reconversion professionnelle dans le développement web, à 33 ans, je ne manque pas de motivation et de
+          <p> En reconversion professionnelle dans le développement web à 33 ans, je ne manque pas de motivation et de
             créativité pour vous aider à réaliser vos projets digitaux, mon défi sera de concrétiser vos idées en
             projets concrets. </p>
         </div>
@@ -114,7 +159,7 @@
               </div>
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>33</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span id="age"> </span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>nico.pereire@gmail.com</span>
                   </li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Statut:</strong> <span>Disponible</span></li>
@@ -269,9 +314,23 @@
 
         <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="./assets/img/portfolio/devwebconcept.png" class="img-custom" alt="devwebconcept">
+              <div class="portfolio-info">
+                <h4>DevWebConcept</h4>
+                <p>Website</p>
+                <div class="portfolio-links">
+                  <a href="./assets/img/portfolio/DevWebConcept/index.php" class="portfolio-details-lightbox"
+                    data-glightbox="type: external" title="Ouvrir"> <i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="col-lg-4 col-md-6 portfolio-item filter-jeux">
             <div class="portfolio-wrap">
-              <img src="./assets/img/portfolio/squid-game.png" class="img-fluid" alt="">
+              <img src="./assets/img/portfolio/squid-game.png" class="img-custom" alt="squid-game">
               <div class="portfolio-info">
                 <h4>Squid Game</h4>
                 <p>Jeux</p>
@@ -285,7 +344,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-autre">
             <div class="portfolio-wrap">
-              <img src="./assets/img/portfolio/couleur.png" class="img-fluid" alt="">
+              <img src="./assets/img/portfolio/couleur.png" class="img-custom" alt="couleur">
               <div class="portfolio-info">
                 <h4> Générateur de couleurs </h4>
                 <p> Autre </p>
@@ -299,7 +358,7 @@
 
           <div class="col-lg-4 col-md-6 portfolio-item filter-jeux">
             <div class="portfolio-wrap">
-              <img src="./assets/img/portfolio/cercles.png" class="img-fluid" alt="">
+              <img src="./assets/img/portfolio/cercles.png" class="img-custom" alt="cercles">
               <div class="portfolio-info">
                 <h4> Cercles et animation </h4>
                 <p> Jeux </p>
@@ -328,28 +387,38 @@
 
         <div class="row mt-1">
           <div class="col-lg-8 mt-5 mt-lg-0">
-            <form action="https://formspree.io/f/meqwlaqq" method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Nom" required>
-                </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Mail" required>
-                </div>
+            <form method="POST" action="">
+              <div class="d-flex mb-3">
+                  <div class="form-group col-md-6 pe-1">
+                      <!-- <label for="prenom">Prénom :</label> -->
+                      <input type="text" placeholder="Prénom" class="form-control" id="prenom" name="prenom" required>
+                  </div>
+              
+                  <div class="form-group col-md-6 ps-1">
+                      <!-- <label for="nom">Nom :</label> -->
+                      <input type="text" placeholder="Nom" class="form-control" id="nom" name="nom" required>
+                  </div>
               </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Sujet" required>
+  
+              <div class="form-group mb-4">
+                  <!-- <label for="email">Email :</label> -->
+                  <input type="email" placeholder="Email" class="form-control" id="email" name="email" required>
               </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+
+              <div class="form-group mb-4">
+                  <!-- <label for="phone">Sujet :</label> -->
+                  <input type="text" placeholder="Sujet" class="form-control" id="sujet" name="sujet" >
               </div>
-              <div class="my-3">
-                <div class="sent-message">Votre message a été envoyé, merci !</div>
+  
+              <div class="form-group mb-4">
+                  <!-- <label for="message">Message :</label> -->
+                  <textarea class="form-control" placeholder="Message" id="message" name="message" rows="4" required></textarea>
               </div>
+  
               <div class="text-center">
-                <button type="submit">Envoyer</button>
+                  <button type="submit" class="btn btn-primary" name="submit" id="submit-btn">Envoyer</button>
               </div>
-            </form>
+          </form>
           </div>
         </div>
       </div>
@@ -369,6 +438,8 @@
             class="bx bxl-linkedin"></i></a>
         <a href="https://discordapp.com/users/926976175623012402" target="_blank" class="discord"><i
             class="bx bxl-discord"></i></a>
+        <a href="https://blog.nicolaspereire.fr" target="_blank" class="google"><i
+          class="bx bxl-google"></i></a>
       </div>
       <div class="copyright">
         &copy; Copyright, All Rights Reserved

@@ -1,4 +1,19 @@
+setTimeout(function(){
+  document.getElementById('msg').style.display = 'none';
+}, 3000);
 
+function calculateAge() {
+  var birthDate = new Date("1990-01-12");
+  var now = new Date();
+  var age = now.getFullYear() - birthDate.getFullYear();
+  
+  // Vérification si l'anniversaire a déjà eu lieu cette année
+  if (now.getMonth() < birthDate.getMonth() || (now.getMonth() === birthDate.getMonth() && now.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  
+  document.getElementById("age").innerHTML = age;
+}
 
 (function () {
   "use strict";
