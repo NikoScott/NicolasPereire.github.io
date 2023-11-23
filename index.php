@@ -1,37 +1,39 @@
 <?php
+
 $confirmationClass = "";
+$confirmationMessage = "";
 
-// Vérifier si le formulaire est soumis
 if (isset($_POST['submit'])) {
-  // Récupérer les valeurs des champs
-  $nom = $_POST['nom'];
-  $prenom = $_POST['prenom'];
-  $email = $_POST['email'];
-  $sujet = $_POST['sujet'];
-  $message = $_POST['message'];
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $email = $_POST['email'];
+    $sujet = $_POST['sujet'];
+    $message = $_POST['message'];
 
-  // Vérifier si tous les champs requis sont saisis
-  if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($message)) {
-    // Vérifier si l'adresse e-mail est valide
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      // Adresse e-mail de destination
+    // Validation des champs
+    if (empty($nom) || empty($prenom) || empty($email) || empty($message)) {
+      $confirmationMessage = "Tous les champs sont obligatoires.";
+      $confirmationClass = "error";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $confirmationMessage = "L'adresse e-mail n'est pas valide.";
+      $confirmationClass = "error";
+    } else {
+      // Nettoyer le champ message
+      $message = htmlspecialchars($message, ENT_QUOTES);
+
+      // Les données sont valides, continuez le traitement
       $to = "contact@nicolaspereire.fr";
-      // Sujet du message
       $subject = "Nouveau message nicolaspereire.fr";
-      // Corps du message
       $body = "Prénom: $prenom\nNom: $nom\nEmail: $email\nSujet: $sujet\nMessage: $message";
-      // En-têtes du message
       $headers = "From: $email";
 
-      // Envoyer l'e-mail
       if (mail($to, $subject, $body, $headers)) {
-        $confirmationMessage = "Merci $prenom $nom ! Votre message a été envoyé avec succès.";
-        $confirmationClass = "success";
+          $confirmationMessage = "Merci $prenom $nom ! Votre message a été envoyé avec succès.";
+          $confirmationClass = "success";
       } else {
-        $confirmationMessage = "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
-        $confirmationClass = "warning";
+          $confirmationMessage = "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
+          $confirmationClass = "warning";
       }
-    }
   }
 }
 ?>
