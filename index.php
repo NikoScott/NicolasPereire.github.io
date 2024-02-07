@@ -46,10 +46,9 @@ if (isset($_POST['submit'])) {
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta name="description" content="Un développeur web compétent et créatif, prêt à mettre ses compétences au service de votre projet pour le rendre unique et performant.">
+  <meta name="keywords" content="développeur">
 
   <title> Nicolas PEREIRE </title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
 
   <!-- Favicons -->
   <link href="" rel="icon">
@@ -129,7 +128,7 @@ if (isset($_POST['submit'])) {
 
         <div class="row">
           <div class="col-lg-4">
-            <img src="./assets/img/Moi-profile.jpg" class="img-fluid" alt="Photo">
+            <img src="./assets/img/profile.png" class="img-fluid" alt="Photo">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content">
             <h3>Développeur full stack </h3>
@@ -177,28 +176,28 @@ if (isset($_POST['submit'])) {
 
         <div class="Skill-logo">
           <div class="logo_skill">
-            <img src="./assets/img/HTML5.png">
+            <img src="./assets/img/HTML5.png" alt="html">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/CSS3_logo.png">
+            <img src="./assets/img/CSS3_logo.png" alt="css">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/JavaScript-logo.png">
+            <img src="./assets/img/JavaScript-logo.png" alt="javascript">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/JQuery-Logo.png">
+            <img src="./assets/img/JQuery-Logo.png" alt="jquery">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/PHP-logo.png">
+            <img src="./assets/img/PHP-logo.png" alt="php">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/Sql_logo.png">
+            <img src="./assets/img/Sql_logo.png" alt="mysql">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/logo_React_logo.png">
+            <img src="./assets/img/logo_React_logo.png" alt="react">
           </div>
           <div class="logo_skill">
-            <img src="./assets/img/symfony_logo.png">
+            <img src="./assets/img/symfony_logo.png" alt="symfony">
           </div>
         </div>
       </div>
