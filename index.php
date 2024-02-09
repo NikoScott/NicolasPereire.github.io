@@ -1,38 +1,40 @@
 <?php
-$confirmationClass = "";
 
-// Vérifier si le formulaire est soumis
-if(isset($_POST['submit'])){
-    // Récupérer les valeurs des champs
+$confirmationClass = "";
+$confirmationMessage = "";
+
+if (isset($_POST['submit'])) {
     $nom = $_POST['nom'];
     $prenom = $_POST['prenom'];
     $email = $_POST['email'];
     $sujet = $_POST['sujet'];
     $message = $_POST['message'];
 
-    // Vérifier si tous les champs requis sont saisis
-    if(!empty($nom) && !empty($prenom) && !empty($email) && !empty($message)){
-        // Vérifier si l'adresse e-mail est valide
-        if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-            // Adresse e-mail de destination
-            $to = "contact@nicolaspereire.fr";
-            // Sujet du message
-            $subject = "Nouveau message nicolaspereire.fr";
-            // Corps du message
-            $body = "Prénom: $prenom\nNom: $nom\nEmail: $email\nSujet: $sujet\nMessage: $message";
-            // En-têtes du message
-            $headers = "From: $email";
+    // Validation des champs
+    if (empty($nom) || empty($prenom) || empty($email) || empty($message)) {
+      $confirmationMessage = "Tous les champs sont obligatoires.";
+      $confirmationClass = "error";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $confirmationMessage = "L'adresse e-mail n'est pas valide.";
+      $confirmationClass = "error";
+    } else {
+      // Nettoyer le champ message
+      $message = htmlspecialchars($message, ENT_QUOTES);
 
-            // Envoyer l'e-mail
-            if(mail($to, $subject, $body, $headers)){
-                $confirmationMessage = "Merci $prenom $nom ! Votre message a été envoyé avec succès.";
-                $confirmationClass = "success";
-            } else{
-                $confirmationMessage = "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
-                $confirmationClass = "warning";
-            }
-        } 
-    }
+      // Les données sont valides, continuez le traitement
+      $to = "contact@nicolaspereire.fr";
+      $subject = "Nouveau message nicolaspereire.fr";
+      $body = "Prénom: $prenom\nNom: $nom\nEmail: $email\nSujet: $sujet\nMessage: $message";
+      $headers = "From: $email";
+
+      if (mail($to, $subject, $body, $headers)) {
+          $confirmationMessage = "Merci $prenom $nom ! Votre message a été envoyé avec succès.";
+          $confirmationClass = "success";
+      } else {
+          $confirmationMessage = "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
+          $confirmationClass = "warning";
+      }
+  }
 }
 ?>
 
@@ -43,20 +45,17 @@ if(isset($_POST['submit'])){
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta name="description" content="Un développeur web compétent et créatif, prêt à mettre ses compétences au service de votre projet pour le rendre unique et performant."> 
+  <meta name="description" content="Un développeur web compétent et créatif, prêt à mettre ses compétences au service de votre projet pour le rendre unique et performant.">
+  <meta name="keywords" content="développeur">
 
   <title> Nicolas PEREIRE </title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
 
   <!-- Favicons -->
   <link href="" rel="icon">
 
 
   <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="./assets/vendor/aos/aos.css" rel="stylesheet">
@@ -98,25 +97,17 @@ if(isset($_POST['submit'])){
     <div class="container" data-aos="zoom-in" data-aos-delay="100">
 
       <!-- CONFIRMATION -->
-      <?php if(!empty($confirmationClass)) { ?>
-          <div id="msg" class="alert alert-<?php echo $confirmationClass; ?>" role="alert"><?php echo $confirmationMessage; ?></div>
+      <?php if (!empty($confirmationClass)) { ?>
+        <div id="msg" class="alert alert-<?php echo $confirmationClass; ?>" role="alert"><?php echo $confirmationMessage; ?></div>
       <?php } ?>
 
       <h1>Nicolas PEREIRE</h1>
-      <p>I'm <span class="typed"
-          data-typed-items="father., basketball player., developer., ready to work with you."></span></p>
-
-      <!-- <p>I'm looking for a work experience.
-        <span class="typed"
-        data-typed-items="a work experience."></span></p>  -->
+      <p>I'm <span class="typed" data-typed-items="father., basketball player., developer., ready to work with you."></span></p>
 
       <div class="social-links">
-        <a href="https://www.linkedin.com/in/nicolas-pereire-440b64163/" target="_blank" class="linkedin"><i
-            class="bx bxl-linkedin"></i></a>
-        <a href="https://discordapp.com/users/926976175623012402" target="_blank" class="discord"><i
-            class="bx bxl-discord"></i></a>        
-        <a href="https://blog.nicolaspereire.fr" target="_blank" class="google"><i
-          class="bx bxl-google"></i></a>
+        <a href="https://www.linkedin.com/in/nicolas-pereire-440b64163/" target="_blank" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        <a href="https://discordapp.com/users/926976175623012402" target="_blank" class="discord"><i class="bx bxl-discord"></i></a>
+        <a href="https://blog.nicolaspereire.fr" target="_blank" class="google"><i class="bx bxl-google"></i></a>
       </div>
 
     </div>
@@ -137,7 +128,7 @@ if(isset($_POST['submit'])){
 
         <div class="row">
           <div class="col-lg-4">
-            <img src="./assets/img/Moi-profile.jpg" class="img-fluid" alt="Photo">
+            <img src="./assets/img/profile.png" class="img-fluid" alt="Photo">
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content">
             <h3>Développeur full stack </h3>
@@ -181,69 +172,52 @@ if(isset($_POST['submit'])){
 
         <div class="section-title">
           <h2>Compétences</h2>
-          <p>
-
-          </p>
         </div>
 
         <div class="Skill-logo">
-
           <div class="logo_skill">
-            <img src="./assets/img/HTML5.png">
+            <img src="./assets/img/HTML5.png" alt="html">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/CSS3_logo.png">
+            <img src="./assets/img/CSS3_logo.png" alt="css">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/JavaScript-logo.png">
+            <img src="./assets/img/JavaScript-logo.png" alt="javascript">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/JQuery-Logo.png">
+            <img src="./assets/img/JQuery-Logo.png" alt="jquery">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/PHP-logo.png">
+            <img src="./assets/img/PHP-logo.png" alt="php">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/Sql_logo.png">
+            <img src="./assets/img/Sql_logo.png" alt="mysql">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/logo_React_logo.png">
+            <img src="./assets/img/logo_React_logo.png" alt="react">
           </div>
-
           <div class="logo_skill">
-            <img src="./assets/img/symfony_logo.png">
+            <img src="./assets/img/symfony_logo.png" alt="symfony">
           </div>
-
         </div>
-
       </div>
     </section><!-- End Skills Section -->
 
     <!-- ======= Resume Section ======= -->
     <section id="resume" class="resume">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <h2>Mon parcours</h2>
         </div>
-
         <div class="row">
           <div class="col-lg-6">
             <h3 class="resume-title">FORMATION</h3>
-
             <div class="resume-item">
               <h4>Titre de développeur full stack </h4>
               <h5>Janvier 2023 - Aujourd'hui</h5>
               <p><em> AFPA de Cannes </em></p>
               <p> Formation de 8 mois dont 2 mois (350h) de stage en entreprise, développeur web et web mobile. </p>
             </div>
-
             <div class="resume-item">
               <h4> Educateur sportif </h4>
               <h5>2014 - 2016</h5>
@@ -251,7 +225,6 @@ if(isset($_POST['submit'])){
               <p> Animation de groupe d'enfants dans une école primaire et dans un collège, découverte et
                 perfectionnement d'adolescents au sein de mon club de basket </p>
             </div>
-
             <div class="resume-item">
               <h4> Technicien d'usinage </h4>
               <h5>2007 - 2013</h5>
@@ -274,7 +247,6 @@ if(isset($_POST['submit'])){
                 <li> Amélioration </li>
               </ul>
             </div>
-
             <div class="resume-item">
               <h4>Responsable de production</h4>
               <h5>Mars 2020 - Mars 2021</h5>
@@ -293,14 +265,12 @@ if(isset($_POST['submit'])){
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio section-bg">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <h2>Mes projets</h2>
           <p> Ce portfolio rassemble l'ensemble de mes réalisations, témoignant de ma polyvalence en matière de
             conception de projets digitaux, allant des jeux captivants aux sites web créatifs que j'ai conçus pour
             satisfaire les besoins de mes clients. </p>
         </div>
-
         <div class="row">
           <div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
             <ul id="portfolio-flters">
@@ -311,9 +281,7 @@ if(isset($_POST['submit'])){
             </ul>
           </div>
         </div>
-
         <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
-
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
               <img src="./assets/img/portfolio/devwebconcept.png" class="img-custom" alt="devwebconcept">
@@ -321,13 +289,23 @@ if(isset($_POST['submit'])){
                 <h4>DevWebConcept</h4>
                 <p>Website</p>
                 <div class="portfolio-links">
-                  <a href="./assets/img/portfolio/DevWebConcept/index.php" class="portfolio-details-lightbox"
-                    data-glightbox="type: external" title="Ouvrir"> <i class="bx bx-link"></i></a>
+                  <a href="https://devwebconcept.com" class="portfolio-details-lightbox" target="_blank" data-glightbox="type: external" title="Ouvrir"> <i class="bx bx-link"></i></a>
                 </div>
               </div>
             </div>
           </div>
-
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="./assets/img/portfolio/blog.png" class="img-custom" alt="blog">
+              <div class="portfolio-info">
+                <h4>Mon blog</h4>
+                <p>Website</p>
+                <div class="portfolio-links">
+                  <a href="https://blog.nicolaspereire.fr" target="_blank" class="portfolio-details-lightbox" data-glightbox="type: external" title="Ouvrir"> <i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="col-lg-4 col-md-6 portfolio-item filter-jeux">
             <div class="portfolio-wrap">
               <img src="./assets/img/portfolio/squid-game.png" class="img-custom" alt="squid-game">
@@ -335,13 +313,11 @@ if(isset($_POST['submit'])){
                 <h4>Squid Game</h4>
                 <p>Jeux</p>
                 <div class="portfolio-links">
-                  <a href="./assets/img/portfolio/Squid_Game/index.html" class="portfolio-details-lightbox"
-                    data-glightbox="type: external" title="Ouvrir"> <i class="bx bx-link"></i></a>
+                  <a href="./assets/img/portfolio/Squid_Game/index.html" class="portfolio-details-lightbox" data-glightbox="type: external" title="Ouvrir"> <i class="bx bx-link"></i></a>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="col-lg-4 col-md-6 portfolio-item filter-autre">
             <div class="portfolio-wrap">
               <img src="./assets/img/portfolio/couleur.png" class="img-custom" alt="couleur">
@@ -349,13 +325,11 @@ if(isset($_POST['submit'])){
                 <h4> Générateur de couleurs </h4>
                 <p> Autre </p>
                 <div class="portfolio-links">
-                  <a href="./assets/img/portfolio/Générateur_couleurs/index.html" class="portfolio-details-lightbox"
-                    target="_blank" data-glightbox="type: external" title="Ouvrir"><i class="bx bx-link"></i></a>
+                  <a href="./assets/img/portfolio/Générateur_couleurs/index.html" class="portfolio-details-lightbox" target="_blank" data-glightbox="type: external" title="Ouvrir"><i class="bx bx-link"></i></a>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="col-lg-4 col-md-6 portfolio-item filter-jeux">
             <div class="portfolio-wrap">
               <img src="./assets/img/portfolio/cercles.png" class="img-custom" alt="cercles">
@@ -363,16 +337,12 @@ if(isset($_POST['submit'])){
                 <h4> Cercles et animation </h4>
                 <p> Jeux </p>
                 <div class="portfolio-links">
-                  <a href="./assets/img/portfolio/Couleurs/index.html" class="portfolio-details-lightbox"
-                    target="_blank" data-glightbox="type: external" title="Ouvrir"><i class="bx bx-link"></i></a>
+                  <a href="./assets/img/portfolio/Couleurs/index.html" class="portfolio-details-lightbox" target="_blank" data-glightbox="type: external" title="Ouvrir"><i class="bx bx-link"></i></a>
                 </div>
               </div>
             </div>
           </div>
-
-
         </div>
-
       </div>
     </section><!-- End Portfolio Section -->
 
@@ -380,45 +350,38 @@ if(isset($_POST['submit'])){
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <h2>Contact</h2>
         </div>
-
         <div class="row mt-1">
           <div class="col-lg-8 mt-5 mt-lg-0">
             <form method="POST" action="">
               <div class="d-flex mb-3">
-                  <div class="form-group col-md-6 pe-1">
-                      <!-- <label for="prenom">Prénom :</label> -->
-                      <input type="text" placeholder="Prénom" class="form-control" id="prenom" name="prenom" required>
-                  </div>
-              
-                  <div class="form-group col-md-6 ps-1">
-                      <!-- <label for="nom">Nom :</label> -->
-                      <input type="text" placeholder="Nom" class="form-control" id="nom" name="nom" required>
-                  </div>
+                <div class="form-group col-md-6 pe-1">
+                  <!-- <label for="prenom">Prénom :</label> -->
+                  <input type="text" placeholder="Prénom" class="form-control" id="prenom" name="prenom" required>
+                </div>
+                <div class="form-group col-md-6 ps-1">
+                  <!-- <label for="nom">Nom :</label> -->
+                  <input type="text" placeholder="Nom" class="form-control" id="nom" name="nom" required>
+                </div>
               </div>
-  
               <div class="form-group mb-4">
-                  <!-- <label for="email">Email :</label> -->
-                  <input type="email" placeholder="Email" class="form-control" id="email" name="email" required>
+                <!-- <label for="email">Email :</label> -->
+                <input type="email" placeholder="Email" class="form-control" id="email" name="email" required>
               </div>
-
               <div class="form-group mb-4">
-                  <!-- <label for="phone">Sujet :</label> -->
-                  <input type="text" placeholder="Sujet" class="form-control" id="sujet" name="sujet" >
+                <!-- <label for="phone">Sujet :</label> -->
+                <input type="text" placeholder="Sujet" class="form-control" id="sujet" name="sujet">
               </div>
-  
               <div class="form-group mb-4">
-                  <!-- <label for="message">Message :</label> -->
-                  <textarea class="form-control" placeholder="Message" id="message" name="message" rows="4" required></textarea>
+                <!-- <label for="message">Message :</label> -->
+                <textarea class="form-control" placeholder="Message" id="message" name="message" rows="4" required></textarea>
               </div>
-  
               <div class="text-center">
-                  <button type="submit" class="btn btn-primary" name="submit" id="submit-btn">Envoyer</button>
+                <button type="submit" class="btn btn-primary" name="submit" id="submit-btn">Envoyer</button>
               </div>
-          </form>
+            </form>
           </div>
         </div>
       </div>
@@ -432,27 +395,19 @@ if(isset($_POST['submit'])){
       <h3>Nicolas PEREIRE</h3>
       <p>Un développeur web passionné et motivé, prêt à relever tous les défis pour vous aider à réaliser vos projets
         digitaux.</p>
-
       <div class="social-links">
-        <a href="https://www.linkedin.com/in/nicolas-pereire-440b64163/" target="_blank" class="linkedin"><i
-            class="bx bxl-linkedin"></i></a>
-        <a href="https://discordapp.com/users/926976175623012402" target="_blank" class="discord"><i
-            class="bx bxl-discord"></i></a>
-        <a href="https://blog.nicolaspereire.fr" target="_blank" class="google"><i
-          class="bx bxl-google"></i></a>
+        <a href="https://www.linkedin.com/in/nicolas-pereire-440b64163/" target="_blank" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        <a href="https://discordapp.com/users/926976175623012402" target="_blank" class="discord"><i class="bx bxl-discord"></i></a>
+        <a href="https://blog.nicolaspereire.fr" target="_blank" class="google"><i class="bx bxl-google"></i></a>
       </div>
       <div class="copyright">
         &copy; Copyright, All Rights Reserved
       </div>
-      <!-- <div class="credits">
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div> -->
     </div>
   </footer><!-- End Footer -->
 
   <div id="preloader"></div>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="./assets/vendor/purecounter/purecounter_vanilla.js"></script>
@@ -464,11 +419,8 @@ if(isset($_POST['submit'])){
   <script src="./assets/vendor/typed.js/typed.min.js"></script>
   <script src="./assets/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="./assets/vendor/php-email-form/validate.js"></script>
-
+  z
   <!-- Template Main JS File -->
   <script src="./assets/js/main.js"></script>
-
-
 </body>
-
 </html>
